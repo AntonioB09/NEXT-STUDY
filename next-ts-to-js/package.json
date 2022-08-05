@@ -10,10 +10,14 @@
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
     "@prisma/client": "^4.1.1",
+    "framer-motion": "^7.0.0",
     "next": "12.2.4",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.34.0",
+    "react-hot-toast": "^2.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.8",
