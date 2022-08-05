@@ -103,19 +103,18 @@ export default function FeedbackPage({feedback}) {
   );
 }
 
-export const getServerSideProps = async ({res}) => {
+export const getServerSideProps = async ({ res }) => {
   const feedback = await prisma.feedback.findMany({
-    select:{
-      email:true,
-      name:true,
+    select: {
+      email: true,
+      name: true,
       feedbackType: true,
-      message:true,
+      message: true,
     },
   });
-  
-  return { 
-    props: { 
-      feedback, 
+  return {
+    props: {
+      feedback,
     },
   };
 };
