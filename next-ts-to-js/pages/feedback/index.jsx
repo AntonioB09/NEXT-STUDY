@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 // import { feedback } from 'data/feedback';
-import prisma from '../lib/prisma'
+import prisma from '../../lib/prisma'
 
 
 
@@ -10,9 +10,9 @@ import prisma from '../lib/prisma'
 
 
 
-export default function FeedbackPage({feedback}) {
-  const formatFeedbackType = (feedback) => {
-    switch (feedback) {
+export default function FeedbackPage({feedbacks}) {
+  const formatFeedbackType = (feedbacks) => {
+    switch (feedbacks) {
       case 'FEEDBACK':
         return 'bg-green-500 text-green-800';
       case 'IDEA':
@@ -67,26 +67,26 @@ export default function FeedbackPage({feedback}) {
                       </tr>
                     </thead>
                     <tbody className="bg-gray-700 divide-y divide-gray-500">
-                      {feedback.map((item) => (
-                        <tr key={item.id}>
+                      {feedbacks.map((feedback) => (
+                        <tr key={feedback.id}>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                            {item.name}
+                            {feedback.name}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
-                            <a href={`mailto:${item.email}`}>{item.email}</a>
+                            <a href={`mailto:${feedback.email}`}>{feedback.email}</a>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-white truncate">
-                            <Link href={`/feedback/${item.id}`}>
-                              {item.message}
+                            <Link href={`/feedback/${feedback.id}`}>
+                              {feedback.message}
                             </Link>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap capitalize">
                             <span
                               className={`flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${formatFeedbackType(
-                                item.feedbackType
+                                feedback.feedbackType
                               )}`}
                             >
-                              {item.feedbackType.toLowerCase()}
+                              {feedback.feedbackType.toLowerCase()}
                             </span>
                           </td>
                         </tr>
@@ -104,8 +104,9 @@ export default function FeedbackPage({feedback}) {
 }
 
 export const getServerSideProps = async ({ res }) => {
-  const feedback = await prisma.feedback.findMany({
+  const feedbacks = await prisma.feedback.findMany({
     select: {
+      id:true,
       email: true,
       name: true,
       feedbackType: true,
@@ -114,9 +115,7 @@ export const getServerSideProps = async ({ res }) => {
   });
   return {
     props: {
-      feedback,
+      feedbacks,
     },
   };
 };
-
-
