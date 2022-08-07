@@ -1,10 +1,23 @@
-import { Menu, Button, Text } from '@mantine/core';
-import { IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons';
-import { NextLink } from '@mantine/next';
-
+import { Menu, Button, Text ,MantineProvider} from "@mantine/core";
+import {
+  IconSettings,
+  IconSearch,
+  IconPhoto,
+  IconMessageCircle,
+  IconTrash,
+  IconArrowsLeftRight,
+} from "@tabler/icons";
+import { NextLink } from "@mantine/next";
 
 export function MenuHeader() {
   return (
+    <MantineProvider theme={{
+      colors: {
+       personacolor: ['#51cf66','#69db7c','#8ce99a','#ebfbee','#2f9e44', '#2b8a3e','#37b24d', '#40c057'],
+      },
+      primaryColor: 'personacolor',
+    }}
+    >
     <Menu shadow="md" width={200}>
       <Menu.Target>
         <Button>Toggle menu</Button>
@@ -13,16 +26,10 @@ export function MenuHeader() {
       <Menu.Dropdown>
         <Menu.Label>Application</Menu.Label>
         <Menu.Item component={NextLink} href="/hello">
-      Hello
-    </Menu.Item>
-    </Menu.Dropdown>
-
-
-
-        
-
+          Hello
+        </Menu.Item>
+      </Menu.Dropdown>
     </Menu>
-
-    
+    </MantineProvider>
   );
 }
