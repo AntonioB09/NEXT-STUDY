@@ -49,7 +49,7 @@ export default function Home() {
           <h1 className="font-bold text-3xl md:text-4xl text-white tracking-wide mb-10 text-center">
             Submit Your Feedback!
           </h1>
-
+         
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="grid grid-cols-1 gap-y-6 shadow-lg p-10 bg-gray-800  rounded-lg"
