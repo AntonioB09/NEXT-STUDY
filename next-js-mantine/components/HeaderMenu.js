@@ -5,11 +5,14 @@ import {
   Group,
   Center,
   Container,
-  ThemeIcon,
+  ActionIcon,
   Space,
+  Text,
+  Title,
 } from "@mantine/core";
-import { IconChevronDown, IconActivity } from "@tabler/icons";
+import { IconChevronDown, IconActivity ,IconSettings} from "@tabler/icons";
 import { NextLink } from "@mantine/next";
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -27,9 +30,13 @@ export function HeaderMenu() {
     <Header height={56} mb={120}>
       <Container>
         <div className={classes.inner}>
-          <ThemeIcon radius="xl" size="xl">
-            <IconActivity />
-          </ThemeIcon>
+        <ActionIcon color="blue" size="xl" radius="lg" >
+            <Link href="/" passHref>
+               <IconActivity  variant="transparent"><IconSettings size={16} /></IconActivity >
+            </Link>
+            
+        </ActionIcon>
+        <Title order={3}> <Text color="green" inherit component="span">VACUCAB</Text></Title>
           <Group spacing={5}>
             <Menu trigger="hover" exitTransitionDuration={0} withArrow>
               <Menu.Target>
@@ -42,10 +49,10 @@ export function HeaderMenu() {
               </Menu.Target>
 
               <Menu.Dropdown>
-                <Menu.Item component={NextLink} href="/hello">
+                <Menu.Item component={NextLink} href="/personas/vacunados">
                   Vacunados
                 </Menu.Item>
-                <Menu.Item component={NextLink} href="/hello">
+                <Menu.Item component={NextLink} href="#" >
                   Contagiados
                 </Menu.Item>
               </Menu.Dropdown>

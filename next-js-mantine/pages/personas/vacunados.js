@@ -1,6 +1,8 @@
 import Head from "next/head";
+import { NextLink } from "@mantine/next";
+import Link from 'next/link';
 import {
-  Avatar,
+
   Badge,
   Table,
   Group,
@@ -10,16 +12,19 @@ import {
   ScrollArea,
   Menu,
   Grid,
+  ThemeIcon,
 } from "@mantine/core";
-import { IconPencil, IconTrash,
-    IconMessages,
+import { 
+    IconPencil, 
+    IconTrash,
+    IconEdit,
     IconNote,
     IconReportAnalytics,
-    
+    IconUser,
     IconDots,} from "@tabler/icons";
 
 const jobColors = {
-    engineer: 'blue',
+    engineer: 'green',
     manager: 'cyan',
     designer: 'pink',
   };
@@ -55,10 +60,10 @@ export default function Vacunados() {
         <tr key={elements.name}>
           <td>
             <Group spacing="sm">
-              <Avatar size={30} src={element.avatar} radius={30} />
-              <Text size="sm" weight={500}>
-                {element.name}
-              </Text>
+            <ThemeIcon variant="light" radius="lg" size="lg">
+            <IconUser/>
+            </ThemeIcon>
+            {element.name}
             </Group>
           </td>
     
@@ -95,11 +100,12 @@ export default function Vacunados() {
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item icon={<IconMessages size={16} stroke={1.5} />}>Send message</Menu.Item>
-              <Menu.Item icon={<IconNote size={16} stroke={1.5} />}>Add note</Menu.Item>
-              <Menu.Item icon={<IconReportAnalytics size={16} stroke={1.5} />}>Analytics</Menu.Item>
+              <Menu.Item icon={<IconReportAnalytics size={16} stroke={1.5}  />
+            }component={NextLink} href="/">Ver Tratamiento</Menu.Item>
+              <Menu.Item icon={<IconNote size={16} stroke={1.5} />}>Mas Informacion</Menu.Item>
+              <Menu.Item icon={<IconEdit size={16} stroke={1.5} />}>Editar Informacion</Menu.Item>
               <Menu.Item icon={<IconTrash size={16} stroke={1.5} />} color="red">
-                Terminate contract
+                Eliminar
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>

@@ -20,9 +20,9 @@ export  const ApplitationContainer  = ({children}) =>{
       }}
 
       footer={
-        <Footer height={60} p="md">
+        
          <FooterS></FooterS>
-        </Footer>
+        
       }
       header={
        <HeaderMenu></HeaderMenu>

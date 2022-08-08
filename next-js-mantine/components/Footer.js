@@ -1,6 +1,5 @@
-import { createStyles, Container, Group, Anchor } from '@mantine/core';
-import { MantineLogo } from '@mantine/ds';
-import Link from 'next/link';
+import { createStyles, Container, Group, Anchor,Image } from '@mantine/core';
+
 const useStyles = createStyles((theme) => ({
   footer: {
     marginTop: 120,
@@ -29,16 +28,19 @@ const useStyles = createStyles((theme) => ({
 export function FooterS() {
   const { classes } = useStyles();
   
-  <Link href="/hello" passHref>
-  <Anchor component="a">Next link</Anchor>
-  </Link>
+
  
 
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
-        <MantineLogo size={28} />
-        <Group ></Group>
+        <Group >
+        <Image
+        radius="md"
+        src="logo-ucab.svg"
+        alt="Random unsplash image"
+         />
+        </Group>
       </Container>
     </div>
   );
