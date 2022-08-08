@@ -2,21 +2,15 @@
 import { useState } from 'react';
 import {
   AppShell,
-  Navbar,
-  Header,
   Footer,
-  Aside,
-  Text,
-  MediaQuery,
-  Burger,
   useMantineTheme,
 } from '@mantine/core';
-import { HeaderSimple } from './Header';
+
 import { FooterS } from './Footer';
+import { HeaderMenu } from './HeaderMenu';
 
 export  const ApplitationContainer  = ({children}) =>{
   const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
   return (
     <AppShell
       styles={{
@@ -31,7 +25,7 @@ export  const ApplitationContainer  = ({children}) =>{
         </Footer>
       }
       header={
-<HeaderSimple></HeaderSimple>
+       <HeaderMenu></HeaderMenu>
       }
     >
       {children}
