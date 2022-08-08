@@ -1,12 +1,5 @@
 import { Menu, Button, Text ,MantineProvider} from "@mantine/core";
-import {
-  IconSettings,
-  IconSearch,
-  IconPhoto,
-  IconMessageCircle,
-  IconTrash,
-  IconArrowsLeftRight,
-} from "@tabler/icons";
+
 import { NextLink } from "@mantine/next";
 
 export function MenuHeader() {
@@ -20,13 +13,16 @@ export function MenuHeader() {
     >
     <Menu shadow="md" width={200}>
       <Menu.Target>
-        <Button>Toggle menu</Button>
+        <Button>Registro</Button>
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>Application</Menu.Label>
+        <Menu.Label>Personas</Menu.Label>
         <Menu.Item component={NextLink} href="/hello">
-          Hello
+          Vacunadas
+        </Menu.Item>
+        <Menu.Item component={NextLink} href="/hello">
+          Tratamiento
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

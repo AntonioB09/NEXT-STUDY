@@ -1,9 +1,17 @@
-
-import { createStyles, Header, Container, Group, Burger,Button ,MantineProvider} from "@mantine/core";
+import {
+  createStyles,
+  Header,
+  Container,
+  Group,
+  Burger,
+  Button,
+  MantineProvider,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { MantineLogo } from "@mantine/ds";
-import { MenuHeader } from "./MenuHeader";
 
+import { MenuHeader } from "./MenuHeader";
+import { ThemeIcon } from "@mantine/core";
+import { IconActivity } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -19,49 +27,48 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
- 
-
-
 export function HeaderSimple() {
   const [opened, { toggle }] = useDisclosure(false);
-  
+
   const { classes, cx } = useStyles();
- 
- 
+
   return (
-    
-    <MantineProvider theme={{
-      colors: {
-        centrosaludcolor: ['#228be6', '#228be6', '#228be6','#228be6','#228be6','#228be6','#228be6', '#228be6'],
-      },
-      primaryColor: 'centrosaludcolor',
-    }}     
+    <MantineProvider
+      theme={{
+        colors: {
+          centrosaludcolor: [
+            "#228be6",
+            "#228be6",
+            "#228be6",
+            "#228be6",
+            "#228be6",
+            "#228be6",
+            "#228be6",
+            "#228be6",
+          ],
+        },
+        primaryColor: "centrosaludcolor",
+      }}
     >
-      
-  
       <Header height={60} mb={120}>
-      <Container className={classes.header}>
-        <MantineLogo size={28} />
+        <Container className={classes.header}>
+          <ThemeIcon radius="xl" size="xl">
+            <IconActivity />
+          </ThemeIcon>
 
-        <Group position="center">
-          <MenuHeader></MenuHeader>
-          <Button >
-           Centros de Salud
-          </Button>
+          <Group position="center">
+            <MenuHeader></MenuHeader>
+            <Button>Centros de Salud</Button>
+          </Group>
 
-
-        </Group>
-
-        <Burger
-          opened={opened}
-          onClick={toggle}
-          className={classes.burger}
-          size="sm"
-        />
-      </Container>
-    </Header>
-    
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            className={classes.burger}
+            size="sm"
+          />
+        </Container>
+      </Header>
     </MantineProvider>
-    
   );
 }

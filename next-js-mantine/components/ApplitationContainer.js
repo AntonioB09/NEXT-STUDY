@@ -12,6 +12,7 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { HeaderSimple } from './Header';
+import { FooterS } from './Footer';
 
 export  const ApplitationContainer  = ({children}) =>{
   const theme = useMantineTheme();
@@ -26,7 +27,7 @@ export  const ApplitationContainer  = ({children}) =>{
 
       footer={
         <Footer height={60} p="md">
-          Application footer
+         <FooterS></FooterS>
         </Footer>
       }
       header={
@@ -34,7 +35,7 @@ export  const ApplitationContainer  = ({children}) =>{
       }
     >
       {children}
-      <Text>Resize app to see responsive navbar in action</Text>
+    
     </AppShell>
   );
 }
