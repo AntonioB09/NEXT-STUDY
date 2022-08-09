@@ -7,6 +7,10 @@ import {
   NavigationProgress,
 } from '@mantine/nprogress';
 
+/**
+ * It listens to the router events and starts/stops the progress bar accordingly
+ * @returns A function that returns a component.
+ */
 export function RouterTransition() {
   const router = useRouter();
 

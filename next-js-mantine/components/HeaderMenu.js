@@ -49,7 +49,7 @@ export function HeaderMenu() {
               </Menu.Target>
 
               <Menu.Dropdown>
-                <Menu.Item component={NextLink} href="/personas/vacunados">
+                <Menu.Item component={NextLink} href="/vacunados">
                   Vacunados
                 </Menu.Item>
                 <Menu.Item component={NextLink} href="#" >
