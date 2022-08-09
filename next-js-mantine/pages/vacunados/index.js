@@ -57,6 +57,7 @@ const jobColors = {
 // ];
 
 export default function Vacunados({ personas }) {
+  console.log(personas )
   const rows = personas.map((persona) => (
     <tr key={persona.doc_identidad}>
       <td>
@@ -91,6 +92,15 @@ export default function Vacunados({ personas }) {
 
         </Group>
       </td>
+
+      <td>
+      <Group spacing="sm">
+        <Text size="sm" color="dimmed">
+          {persona.fecha_nac}
+        </Text>
+
+        </Group>
+      </td>
       <td>
       <Group spacing="sm">
         <Text size="sm" color="dimmed">
@@ -99,11 +109,18 @@ export default function Vacunados({ personas }) {
 
         </Group>
       </td>
+
       <td>
-        <Group spacing={0} position="right">
-          <ActionIcon>
-            <IconPencil size={16} stroke={1.5} />
-          </ActionIcon>
+      <Group spacing="sm">
+        <Text size="sm" color="dimmed">
+          {persona.reside.cod_municipio}
+        </Text>
+
+        </Group>
+      </td>
+      <td>
+        <Group spacing={0} position="center">
+
           <Menu transition="pop" withArrow position="right-end">
             <Menu.Target>
               <ActionIcon>
@@ -111,13 +128,8 @@ export default function Vacunados({ personas }) {
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item
-                icon={<IconReportAnalytics size={16} stroke={1.5} />}
-                component={NextLink}
-                href="/"
-              >
-                Ver Tratamiento
-              </Menu.Item>
+             
+
               <Menu.Item
                 icon={<IconNote size={16} stroke={1.5} />}
                 component={NextLink}
@@ -150,14 +162,17 @@ export default function Vacunados({ personas }) {
       </Head>
       <Grid justify="center" mt={50}>
         <ScrollArea>
-          <Table sx={{ minWidth: 800 }} verticalSpacing="sm">
+          <Table sx={{ minWidth: 800 }} verticalSpacing="sm" fontSize="md" striped highlightOnHover>
             <thead>
               <tr>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Cedula</th>
                 <th>Sexo</th>
+                <th>Fecha NA</th>
                 <th>Telefono</th>
+                <th>Reside</th>
+                <th>Detalles</th>
                 <th />
               </tr>
             </thead>
@@ -169,21 +184,43 @@ export default function Vacunados({ personas }) {
   );
 }
 
-export const getServerSideProps = async ({ res }) => {
-  const personas = await prisma.persona.findMany({
-    select: {
-      doc_identidad: true,
-      nombre_per: true,
-      apellido_per: true,
-      ocupacion_per: true,
-      sexo: true,
-      n_telefono_per: true,
-    },
-  });
+// export const getServerSideProps = async ({ res }) => {
+//   const personas = await prisma.persona.findMany({
+//     select: {
+//       doc_identidad: true,
+//       nombre_per: true,
+//       apellido_per: true,
+//       ocupacion_per: true,
+//       sexo: true,
+//       n_telefono_per: true,
+//      
+//     },
+//   });
 
+//   return {
+//     props: {
+//       personas,
+//     },
+//   };
+// };
+
+
+export const getStaticProps = async () => {
+  
+  const pern = await prisma.persona.findMany(
+    {
+      include:{
+        reside:true,
+      }
+    }
+  );
+ console.dir(pern, { depth: null })
   return {
-    props: {
-      personas,
-    },
-  };
-};
+     props: {
+        personas: JSON.parse(JSON.stringify(pern )) 
+     },
+     
+  }
+  
+
+}
