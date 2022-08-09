@@ -8,8 +8,8 @@ datasource db {
 }
 
 model asignado {
-  id_psalud      BigInt
-  cod_centro     BigInt
+  id_psalud      Int
+  cod_centro     Int
   fecha_asignado DateTime       @db.Date
   id             Int            @default(autoincrement())
   centro_salud   centro_salud   @relation(fields: [cod_centro], references: [cod_centro], onDelete: NoAction, map: "cod_centro_foreign")
@@ -19,13 +19,13 @@ model asignado {
 }
 
 model centro_salud {
-  cod_centro     BigInt          @id(map: "cod_centro_pkey")
+  cod_centro     Int          @id(map: "cod_centro_pkey")
   nomb_centro    String          @db.VarChar(255)
   direccion      String          @db.VarChar(255)
   centro_hosp    Boolean         @default(false)
   centro_vac     Boolean         @default(false)
-  id_encargado   BigInt?
-  cod_municipio  BigInt
+  id_encargado   Int?
+  cod_municipio  Int
   activo         Boolean?        @default(true)
   municipio      municipio       @relation(fields: [cod_municipio], references: [cod_municipio], onDelete: NoAction, map: "cod_municipio_foreign")
   personal_salud personal_salud? @relation(fields: [id_encargado], references: [doc_identidad], onDelete: NoAction, map: "id_encargado_foreign")
@@ -35,10 +35,10 @@ model centro_salud {
 }
 
 model consiste {
-  cod_medicamento BigInt
-  cod_trat        BigInt
-  cant_dias       BigInt
-  dosis           BigInt
+  cod_medicamento Int
+  cod_trat        Int
+  cant_dias       Int
+  dosis           Int
   frecuencia      String      @db.VarChar(255)
   id              Int         @default(autoincrement())
   medicamento     medicamento @relation(fields: [cod_medicamento], references: [cod_medicamento], onDelete: NoAction, map: "cod_medicamento_foreign")
@@ -48,10 +48,10 @@ model consiste {
 }
 
 model contagio {
-  doc_identidad      BigInt
+  doc_identidad      Int
   denom_oms          String         @db.VarChar(255)
   fecha_contagio     DateTime       @db.Date
-  tiempo_reposo      BigInt
+  tiempo_reposo      Int
   casa_hospitalizado Boolean
   id                 Int            @default(autoincrement())
   virus_variante     virus_variante @relation(fields: [denom_oms], references: [denom_oms], onDelete: NoAction, map: "denom_oms_foreign")
@@ -61,7 +61,7 @@ model contagio {
 }
 
 model eficaz {
-  id_vacuna      BigInt
+  id_vacuna      Int
   denom_oms      String         @db.VarChar(255)
   porc_eficacia  Float          @db.Real
   id             Int            @default(autoincrement())
@@ -72,17 +72,17 @@ model eficaz {
 }
 
 model estado_provincia {
-  cod_estado BigInt      @id(map: "cod_estado_pkey")
+  cod_estado Int      @id(map: "cod_estado_pkey")
   nom_estado String      @db.VarChar(255)
-  cod_pais   BigInt?
+  cod_pais   Int?
   activo     Boolean?    @default(true)
   pais       pais?       @relation(fields: [cod_pais], references: [cod_pais], onDelete: NoAction, map: "cod_pais_foreign")
   municipio  municipio[]
 }
 
 model hospitalizado {
-  doc_identidad       BigInt
-  cod_centro          BigInt
+  doc_identidad       Int
+  cod_centro          Int
   fecha_hospitalizado DateTime     @db.Date
   id                  Int          @default(autoincrement())
   centro_salud        centro_salud @relation(fields: [cod_centro], references: [cod_centro], onDelete: NoAction, map: "cod_centro_foreign")
@@ -92,7 +92,7 @@ model hospitalizado {
 }
 
 model medicamento {
-  cod_medicamento    BigInt     @id(map: "cod_medicamento_pkey")
+  cod_medicamento    Int     @id(map: "cod_medicamento_pkey")
   nombre_medicamento String     @db.VarChar(255)
   compuesto          String     @db.VarChar(255)
   concentracion      Float      @db.Real
@@ -101,9 +101,9 @@ model medicamento {
 }
 
 model municipio {
-  cod_municipio    BigInt            @id(map: "cod_municipio_pkey")
+  cod_municipio    Int            @id(map: "cod_municipio_pkey")
   nombre_municipio String            @db.VarChar(255)
-  cod_estado       BigInt?
+  cod_estado       Int?
   activo           Boolean?          @default(true)
   estado_provincia estado_provincia? @relation(fields: [cod_estado], references: [cod_estado], onDelete: NoAction, map: "cod_estado_prov_foreign")
   centro_salud     centro_salud[]
@@ -111,7 +111,7 @@ model municipio {
 }
 
 model pais {
-  cod_pais         BigInt             @id
+  cod_pais         Int             @id
   nombre_pais      String             @db.VarChar(255)
   activo           Boolean?           @default(true)
   estado_provincia estado_provincia[]
@@ -121,14 +121,14 @@ model pais {
 
 model persona {
   
-  doc_identidad  BigInt          @id(map: "doc_identidad_pkey")
+  doc_identidad  Int          @id(map: "doc_identidad_pkey")
   nombre_per     String          @db.VarChar(255)
   apellido_per   String          @db.VarChar(255)
   fecha_nac      DateTime        @db.Date
   sexo           String          @db.VarChar(255)
   ocupacion_per  String?         @db.VarChar(255)
   alto_riesgo    Boolean
-  n_telefono_per BigInt?
+  n_telefono_per Int?
   direccion      String?         @db.VarChar(255)
   es_paciente    Boolean?
   es_pers_salud  Boolean?
@@ -143,7 +143,7 @@ model persona {
 }
 
 model personal_salud {
-  doc_identidad       BigInt         @id(map: "doc_identidad_psalud_pkey")
+  doc_identidad       Int         @id(map: "doc_identidad_psalud_pkey")
   es_medico           Boolean        @default(false)
   es_enfermeria       Boolean        @default(false)
   es_asistente_medico Boolean        @default(false)
@@ -156,8 +156,8 @@ model personal_salud {
 }
 
 model presenta {
-  id_vacuna      BigInt
-  cod_sintoma    BigInt
+  id_vacuna      Int
+  cod_sintoma    Int
   id             Int            @default(autoincrement())
   sintoma_efecto sintoma_efecto @relation(fields: [cod_sintoma], references: [cod_sintoma], onDelete: NoAction, map: "cod_sintoma_foreign")
   vacuna         vacuna         @relation(fields: [id_vacuna], references: [id_vacuna], onDelete: NoAction, map: "id_vacuna_foreign")
@@ -166,8 +166,8 @@ model presenta {
 }
 
 model requiere {
-  id_paciente        BigInt
-  cod_trat           BigInt
+  id_paciente        Int
+  cod_trat           Int
   fecha              DateTime    @db.Date
   estado_tratamiento String?     @db.VarChar(255)
   casa_hospitalizado Boolean
@@ -180,8 +180,8 @@ model requiere {
 }
 
 model reside {
-  doc_identidad BigInt
-  cod_municipio BigInt
+  doc_identidad Int
+  cod_municipio Int
   fecha_reside  DateTime  @db.Date
   id            Int       @default(autoincrement())
   municipio     municipio @relation(fields: [cod_municipio], references: [cod_municipio], onDelete: NoAction, map: "cod_municipio_foreign")
@@ -191,7 +191,7 @@ model reside {
 }
 
 model sintoma_efecto {
-  cod_sintoma     BigInt     @id(map: "cod_sintoma_pkey")
+  cod_sintoma     Int     @id(map: "cod_sintoma_pkey")
   descrip_sintoma String     @db.VarChar(255)
   activo          Boolean?   @default(true)
   presenta        presenta[]
@@ -200,7 +200,7 @@ model sintoma_efecto {
 
 model tiene {
   denom_oms      String         @db.VarChar(255)
-  cod_sintoma    BigInt
+  cod_sintoma    Int
   id             Int            @default(autoincrement())
   sintoma_efecto sintoma_efecto @relation(fields: [cod_sintoma], references: [cod_sintoma], onDelete: NoAction, map: "cod_sintoma_foreign")
   virus_variante virus_variante @relation(fields: [denom_oms], references: [denom_oms], onDelete: NoAction, map: "denom_oms_foreign")
@@ -209,7 +209,7 @@ model tiene {
 }
 
 model tratamiento {
-  cod_trat            BigInt     @id(map: "cod_trat_pkey")
+  cod_trat            Int     @id(map: "cod_trat_pkey")
   nomb_tratamiento    String     @db.VarChar(255)
   descrip_tratamiento String     @db.VarChar(255)
   activo              Boolean?   @default(true)
@@ -218,13 +218,13 @@ model tratamiento {
 }
 
 model vacuna {
-  id_vacuna   BigInt     @id(map: "id_vacuna_pkey")
+  id_vacuna   Int     @id(map: "id_vacuna_pkey")
   nomb_vacuna String     @db.VarChar(255)
   lote        Int
-  cant_dosis  BigInt
+  cant_dosis  Int
   tipo        String     @db.VarChar(255)
   laboratorio String     @db.VarChar(255)
-  cod_pais    BigInt
+  cod_pais    Int
   activo      Boolean?   @default(true)
   pais        pais       @relation(fields: [cod_pais], references: [cod_pais], onDelete: NoAction, map: "cod_pais_foreign")
   eficaz      eficaz[]
@@ -233,12 +233,12 @@ model vacuna {
 }
 
 model vacunada {
-  doc_identidad  BigInt
-  id_vacuna      BigInt
-  cod_centro     BigInt
-  id_psalud      BigInt
+  doc_identidad  Int
+  id_vacuna      Int
+  cod_centro     Int
+  id_psalud      Int
   fecha_vacuna   DateTime       @db.Date
-  dosis          BigInt
+  dosis          Int
   id             Int            @default(autoincrement())
   centro_salud   centro_salud   @relation(fields: [cod_centro], references: [cod_centro], onDelete: NoAction, map: "cod_centro_foreign")
   persona        persona        @relation(fields: [doc_identidad], references: [doc_identidad], onDelete: NoAction, map: "doc_identidad_foreign")
@@ -254,7 +254,7 @@ model virus_variante {
   linaje        String     @db.VarChar(255)
   origen_annio  DateTime   @db.Date
   origen_mes    DateTime   @db.Date
-  cod_pais      BigInt
+  cod_pais      Int
   clasificacion String     @db.VarChar(255)
   activo        Int        @default(autoincrement())
   pais          pais       @relation(fields: [cod_pais], references: [cod_pais], onDelete: NoAction, map: "cod_pais_foreign")

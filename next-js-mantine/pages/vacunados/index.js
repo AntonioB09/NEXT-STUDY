@@ -1,8 +1,7 @@
 import Head from "next/head";
 import { NextLink } from "@mantine/next";
-import prisma from '../../lib/prisma'
+import prisma from "../../lib/prisma";
 import {
-
   Badge,
   Table,
   Group,
@@ -14,84 +13,93 @@ import {
   Grid,
   ThemeIcon,
 } from "@mantine/core";
-import { 
-    IconPencil, 
-    IconTrash,
-    IconEdit,
-    IconNote,
-    IconReportAnalytics,
-    IconUser,
-    IconDots,} from "@tabler/icons";
+import {
+  IconPencil,
+  IconTrash,
+  IconEdit,
+  IconNote,
+  IconReportAnalytics,
+  IconUser,
+  IconDots,
+} from "@tabler/icons";
 
 const jobColors = {
-    engineer: 'green',
-    manager: 'cyan',
-    designer: 'pink',
-  };
+  engineer: "green",
+  manager: "cyan",
+  designer: "pink",
+};
 
-  // const elements = [
-  //   {
-  //     id: 1,
-  //     avatar: "https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-  //     name: "Robert Wolfkisser",
-  //     job: "Engineer",
-  //     email: "rob_wolf@gmail.com",
-  //     phone: "+44 (452) 886 09 12"
-  //   },
-  //   {
-  //     id: 2,
-  //     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-  //     name: "Bill Horsefighter",
-  //     job: "Designer",
-  //     email: "bhorsefighter@gmail.com",
-  //     phone: "+44 (667) 341 45 22"
-  //   },
-  //   {
-  //     id: 3,
-  //     avatar: "https://images.unsplash.com/photo-1630841539293-bd20634c5d72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-  //     name: "Jeremy Footviewer",
-  //     job: "Manager",
-  //     email: "jeremy@foot.dev",
-  //     phone: "+44 (881) 245 65 65"
-  //   }
-  // ];
+// const elements = [
+//   {
+//     id: 1,
+//     avatar: "https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
+//     name: "Robert Wolfkisser",
+//     job: "Engineer",
+//     email: "rob_wolf@gmail.com",
+//     phone: "+44 (452) 886 09 12"
+//   },
+//   {
+//     id: 2,
+//     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
+//     name: "Bill Horsefighter",
+//     job: "Designer",
+//     email: "bhorsefighter@gmail.com",
+//     phone: "+44 (667) 341 45 22"
+//   },
+//   {
+//     id: 3,
+//     avatar: "https://images.unsplash.com/photo-1630841539293-bd20634c5d72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
+//     name: "Jeremy Footviewer",
+//     job: "Manager",
+//     email: "jeremy@foot.dev",
+//     phone: "+44 (881) 245 65 65"
+//   }
+// ];
 
-export default function Vacunados({personas}) {
-   
+export default function Vacunados({ personas }) {
+  const rows = personas.map((persona) => (
+    <tr key={persona.doc_identidad}>
+      <td>
+        <Group spacing="sm">
+          <ThemeIcon variant="light" radius="lg" size="lg">
+            <IconUser />
+          </ThemeIcon>
+          {persona.nombre_per}
+        </Group>
+      </td>
+      <td>
+        <Group spacing="sm">
+          <Text size="sm" color="dimmed">
+            {persona.apellido_per}
+          </Text>
+        </Group>
+      </td>
 
-    const rows = personas.map((persona) => (
-        <tr key={persona.nombre_per}>
-          <td>
-            <Group spacing="sm">
-            <ThemeIcon variant="light" radius="lg" size="lg">
-            <IconUser/>
-            </ThemeIcon>
-            {persona.nombre_per}
-            </Group>
-          </td>
-    
-          <td>
-            <Badge
-              color={jobColors[persona.ocupacion_per.toLowerCase()]}
-             
-            >
-              {persona.ocupacion_per}
-            </Badge>
-          </td>
-          <td>
-            <Anchor >
-              {persona.sexo}
-            </Anchor>
-          </td>
-          <td>
-            <Text size="sm" color="dimmed">
-              {persona.n_telefono_per}
-            </Text>
-          </td>
-          <td>
+      <td>
+      <Group spacing="sm">
+        <Text size="sm" color="dimmed">
+          {persona.doc_identidad}
+        </Text>
 
-         
-          
+        </Group>
+      </td>
+      <td>
+      <Group spacing="sm">
+        <Text size="sm" color="dimmed">
+          {persona.sexo}
+        </Text>
+
+        </Group>
+      </td>
+      <td>
+      <Group spacing="sm">
+        <Text size="sm" color="dimmed">
+          {persona.n_telefono_per}
+        </Text>
+
+        </Group>
+      </td>
+      <td>
         <Group spacing={0} position="right">
           <ActionIcon>
             <IconPencil size={16} stroke={1.5} />
@@ -103,20 +111,35 @@ export default function Vacunados({personas}) {
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item icon={<IconReportAnalytics size={16} stroke={1.5} />}
-              component={NextLink} href="/">Ver Tratamiento</Menu.Item>
-              <Menu.Item icon={<IconNote size={16} stroke={1.5} />}
-              component={NextLink} href={`/vacunados/${persona.doc_identidad}`}>Mas Informacion</Menu.Item>
-              <Menu.Item icon={<IconEdit size={16} stroke={1.5} />}>Editar Informacion</Menu.Item>
-              <Menu.Item icon={<IconTrash size={16} stroke={1.5} />} color="red">
+              <Menu.Item
+                icon={<IconReportAnalytics size={16} stroke={1.5} />}
+                component={NextLink}
+                href="/"
+              >
+                Ver Tratamiento
+              </Menu.Item>
+              <Menu.Item
+                icon={<IconNote size={16} stroke={1.5} />}
+                component={NextLink}
+                href={`/vacunados/${persona.doc_identidad}`}
+              >
+                Mas Informacion
+              </Menu.Item>
+              <Menu.Item icon={<IconEdit size={16} stroke={1.5} />}>
+                Editar Informacion
+              </Menu.Item>
+              <Menu.Item
+                icon={<IconTrash size={16} stroke={1.5} />}
+                color="red"
+              >
                 Eliminar
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
         </Group>
       </td>
-        </tr>
-      ));
+    </tr>
+  ));
 
   return (
     <div>
@@ -126,21 +149,21 @@ export default function Vacunados({personas}) {
         <link rel="icon" href="/heal.ico" />
       </Head>
       <Grid justify="center" mt={50}>
-      <ScrollArea>
-      <Table sx={{ minWidth: 800 }} verticalSpacing="sm">
-        <thead>
-          <tr>
-            <th>Employee</th>
-            <th>Job title</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Info</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
-    </ScrollArea>
+        <ScrollArea>
+          <Table sx={{ minWidth: 800 }} verticalSpacing="sm">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Cedula</th>
+                <th>Sexo</th>
+                <th>Telefono</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </Table>
+        </ScrollArea>
       </Grid>
     </div>
   );
@@ -149,28 +172,18 @@ export default function Vacunados({personas}) {
 export const getServerSideProps = async ({ res }) => {
   const personas = await prisma.persona.findMany({
     select: {
-      
+      doc_identidad: true,
       nombre_per: true,
+      apellido_per: true,
       ocupacion_per: true,
       sexo: true,
-      
+      n_telefono_per: true,
     },
   });
-  console.log(personas)
+
   return {
     props: {
       personas,
     },
   };
 };
-
-
-// export const getServerSideProps = async ({ res }) => {
-//   const personas = await prisma.persona.findMany(JSON.stringify(
-//     this,
-//     (key, value) => (typeof value === 'bigint' ? value.toString() : value) 
-//   ));
-  
-//   console.log(personas)
-//   return { props: { personas } }
-// };
