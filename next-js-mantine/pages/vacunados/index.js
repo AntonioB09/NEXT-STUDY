@@ -2,12 +2,12 @@ import Head from "next/head";
 import { NextLink } from "@mantine/next";
 import prisma from "../../lib/prisma";
 import {
-  Badge,
+  
   Table,
   Group,
   Text,
   ActionIcon,
-  Anchor,
+  
   ScrollArea,
   Menu,
   Grid,
@@ -29,35 +29,9 @@ const jobColors = {
   designer: "pink",
 };
 
-// const elements = [
-//   {
-//     id: 1,
-//     avatar: "https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-//     name: "Robert Wolfkisser",
-//     job: "Engineer",
-//     email: "rob_wolf@gmail.com",
-//     phone: "+44 (452) 886 09 12"
-//   },
-//   {
-//     id: 2,
-//     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-//     name: "Bill Horsefighter",
-//     job: "Designer",
-//     email: "bhorsefighter@gmail.com",
-//     phone: "+44 (667) 341 45 22"
-//   },
-//   {
-//     id: 3,
-//     avatar: "https://images.unsplash.com/photo-1630841539293-bd20634c5d72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-//     name: "Jeremy Footviewer",
-//     job: "Manager",
-//     email: "jeremy@foot.dev",
-//     phone: "+44 (881) 245 65 65"
-//   }
-// ];
 
 export default function Vacunados({ personas }) {
-  console.log(personas )
+  // console.log(personas )
   const rows = personas.map((persona) => (
     <tr key={persona.doc_identidad}>
       <td>
@@ -184,27 +158,6 @@ export default function Vacunados({ personas }) {
   );
 }
 
-// export const getServerSideProps = async ({ res }) => {
-//   const personas = await prisma.persona.findMany({
-//     select: {
-//       doc_identidad: true,
-//       nombre_per: true,
-//       apellido_per: true,
-//       ocupacion_per: true,
-//       sexo: true,
-//       n_telefono_per: true,
-//      
-//     },
-//   });
-
-//   return {
-//     props: {
-//       personas,
-//     },
-//   };
-// };
-
-
 export const getStaticProps = async () => {
   
   const pern = await prisma.persona.findMany(
@@ -214,7 +167,7 @@ export const getStaticProps = async () => {
       }
     }
   );
- console.dir(pern, { depth: null })
+//  console.dir(pern, { depth: null })
   return {
      props: {
         personas: JSON.parse(JSON.stringify(pern )) 
