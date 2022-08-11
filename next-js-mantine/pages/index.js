@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { Card, Image, Text, Divider, Button, Group, Grid } from "@mantine/core";
 
+
 export default function Home() {
   return (
     <div>
@@ -74,6 +75,8 @@ export default function Home() {
               </Button>
             </Card>
           </Grid.Col>
+
+          
         </Grid>
       </main>
     </div>

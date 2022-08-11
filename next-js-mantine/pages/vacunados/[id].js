@@ -1,31 +1,31 @@
 import React from "react";
 import Link from "next/link";
 import prisma from "../../lib/prisma";
-import { Avatar, Text, Group, Badge, Skeleton } from "@mantine/core";
+import { Avatar, Text, Group, Badge,  SimpleGrid, Box } from "@mantine/core";
 import { IconPhoneCall, IconId, IconMapPin, IconUser } from "@tabler/icons";
-import { useRouter } from "next/router";
+
 
 const Details = ({ person }) => {
-  const router = useRouter();
+  
 
-  
-  
+  // console.log(person[0])
   const rColors = {
     true: "red",
     false: "blue",
   };
 
-  return router.isFallback ? (
-    <>
-      <Skeleton height={50} circle mb="xl" />
-      <Skeleton height={8} radius="xl" />
-      <Skeleton height={8} mt={6} radius="xl" />
-      <Skeleton height={8} mt={6} width="70%" radius="xl" />
-    </>
-  ) : (
+  return (
     <div>
+      <SimpleGrid cols={2} breakpoints={[{ maxWidth: 755, cols: 1 }]}>
+      <Box sx={(theme) => ({
+          padding: theme.spacing.xl,
+          borderRadius: theme.radius.md,
+          backgroundImage: `linear-gradient(135deg, ${theme.colors[theme.primaryColor][2]} 0%, ${
+            theme.colors[theme.primaryColor][4]
+          } 100%)`,
+        })}>
+
       <Group>
-      
         <Avatar size={94} radius="md" />
         <div>
           <Text sx={{ textTransform: "uppercase" }} weight={700}>
@@ -33,39 +33,93 @@ const Details = ({ person }) => {
           </Text>
 
           <Text size="lg" weight={500}>
-            {person.nombre_per} {person.apellido_per}
+            {person[0].nombre_per} {person[0].apellido_per}
           </Text>
 
           <Group spacing={10} mt={3}>
             <IconId stroke={1.5} size={16} />
-            <Text>{person.doc_identidad}</Text>
+            <Text>
+              {person[0].nacionalidad} {person[0].doc_identidad}
+            </Text>
           </Group>
           <Group spacing={10} mt={3}>
             <IconUser stroke={1.5} size={16} />
-            <Text>{person.sexo}</Text>
+            <Text>{person[0].sexo}</Text>
           </Group>
 
           <Group spacing={10} mt={3}>
             <IconMapPin stroke={1.5} size={16} />
             <Text>
-              {person.nacionalidad} {person.direccion}
+              {person[0].direccion} - {person[0].nombre_municipio}
             </Text>
           </Group>
 
           <Group spacing={10} mt={5}>
             <IconPhoneCall stroke={1.5} size={16} />
-            <Text> </Text>
+            <Text> {person[0].n_telefono_per}</Text>
           </Group>
 
           <Group spacing={10} mt={5}>
             <Text size="xs">Alto Riesgo</Text>
-            <Badge color={rColors[person.alto_riesgo.toString()]}>
-              {person.alto_riesgo.toString()}
+            <Badge color={rColors[person[0].alto_riesgo.toString()]}>
+              {person[0].alto_riesgo.toString()}
             </Badge>
           </Group>
         </div>
       </Group>
+      </Box>
+      <Box sx={(theme) => ({
+          padding: theme.spacing.xl,
+          borderRadius: theme.radius.md,
+          backgroundImage: `linear-gradient(135deg, ${theme.colors[theme.primaryColor][2]} 0%, ${
+            theme.colors[theme.primaryColor][4]
+          } 100%)`,
+        })}>
 
+      <Group>
+        
+        <div>
+          <Text sx={{ textTransform: "uppercase" }} weight={700}>
+            INFORMACION DE VACUNA
+          </Text>
+
+          <Text size="lg" weight={500}>
+            {person[0].nombre_per} {person[0].apellido_per}
+          </Text>
+
+          <Group spacing={10} mt={3}>
+            <IconId stroke={1.5} size={16} />
+            <Text>
+              {person[0].nacionalidad} {person[0].doc_identidad}
+            </Text>
+          </Group>
+          <Group spacing={10} mt={3}>
+            <IconUser stroke={1.5} size={16} />
+            <Text>{person[0].sexo}</Text>
+          </Group>
+
+          <Group spacing={10} mt={3}>
+            <IconMapPin stroke={1.5} size={16} />
+            <Text>
+              {person[0].direccion} - {person[0].nombre_municipio}
+            </Text>
+          </Group>
+
+          <Group spacing={10} mt={5}>
+            <IconPhoneCall stroke={1.5} size={16} />
+            <Text> {person[0].n_telefono_per}</Text>
+          </Group>
+
+          <Group spacing={10} mt={5}>
+            <Text size="xs">Alto Riesgo</Text>
+            <Badge color={rColors[person[0].alto_riesgo.toString()]}>
+              {person[0].alto_riesgo.toString()}
+            </Badge>
+          </Group>
+        </div>
+      </Group>
+      </Box>
+      </SimpleGrid>
       <Link href="/vacunados">
         <a>Go back</a>
       </Link>
@@ -79,30 +133,19 @@ export const getStaticProps = async (context) => {
   const id = context.params.id;
   var int = parseInt(id);
 
-  const data = await prisma.persona.findUnique({
-    where: {
-      doc_identidad: int,
-    },
-    select: {
-      doc_identidad: true,
-      nombre_per: true,
-      apellido_per: true,
-      sexo: true,
-      n_telefono_per: true,
-      nacionalidad: true,
-      direccion: true,
-      alto_riesgo: true,
-      reside: true,
-    },
-  });
-  // console.log(data)
-  // console.log(data.reside.cod_municipio)
-  // console.log(typeof data);
+  const pern = await prisma.$queryRaw`SELECT *  
+  FROM persona left join reside 
+  on persona.doc_identidad = reside.doc_identidad 
+  left join municipio 
+  on reside.cod_municipio = municipio.cod_municipio
+  where persona.doc_identidad = ${int}`;
+  console.log(pern);
+
   return {
-    props: { person: JSON.parse(JSON.stringify(data)) },
+    props: {
+      person: JSON.parse(JSON.stringify(pern)),
+    },
   };
-
-
 };
 
 export const getStaticPaths = async () => {
@@ -116,6 +159,29 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: false,
   };
 };
+
+// const data = await prisma.persona.findUnique({
+//   where: {
+//     doc_identidad: int,
+//   },
+//   select: {
+//     doc_identidad: true,
+//     nombre_per: true,
+//     apellido_per: true,
+//     sexo: true,
+//     n_telefono_per: true,
+//     nacionalidad: true,
+//     direccion: true,
+//     alto_riesgo: true,
+//     reside:{
+//       select:{
+//         cod_municipio:true,
+//       },
+
+//     },
+//   },
+
+// });
