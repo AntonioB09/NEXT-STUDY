@@ -30,9 +30,16 @@ const jobColors = {
 };
 
 
+
 export default function Vacunados({ personas }) {
   // console.log(personas )
+  // console.log(typeof personas );
+
+  // for(const [key, value] of Object.entries(personas)){
+  //   console.log(value)}
+  
   const rows = personas.map((persona) => (
+  
     <tr key={persona.doc_identidad}>
       <td>
         <Group spacing="sm">
@@ -86,10 +93,10 @@ export default function Vacunados({ personas }) {
 
       <td>
       <Group spacing="sm">
-        <Text size="sm" color="dimmed">
-          {persona.reside.cod_municipio}
+        <Text size="sm" color="dimmed" >
+          {persona.cod_municipio}
         </Text>
-
+      
         </Group>
       </td>
       <td>
@@ -160,14 +167,12 @@ export default function Vacunados({ personas }) {
 
 export const getStaticProps = async () => {
   
-  const pern = await prisma.persona.findMany(
-    {
-      include:{
-        reside:true,
-      }
-    }
-  );
-//  console.dir(pern, { depth: null })
+const pern =await prisma.$queryRaw`SELECT * 
+FROM persona  left join reside 
+on persona.doc_identidad = reside.doc_identidad`
+
+//  console.log(pern)  
+
   return {
      props: {
         personas: JSON.parse(JSON.stringify(pern )) 
@@ -175,5 +180,8 @@ export const getStaticProps = async () => {
      
   }
   
+  
 
 }
+
+

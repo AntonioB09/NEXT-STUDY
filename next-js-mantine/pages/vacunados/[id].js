@@ -8,7 +8,8 @@ import { useRouter } from "next/router";
 const Details = ({ person }) => {
   const router = useRouter();
 
-  // console.log(person)
+  
+  
   const rColors = {
     true: "red",
     false: "blue",
@@ -24,6 +25,7 @@ const Details = ({ person }) => {
   ) : (
     <div>
       <Group>
+      
         <Avatar size={94} radius="md" />
         <div>
           <Text sx={{ textTransform: "uppercase" }} weight={700}>
@@ -52,7 +54,7 @@ const Details = ({ person }) => {
 
           <Group spacing={10} mt={5}>
             <IconPhoneCall stroke={1.5} size={16} />
-            <Text> {person.n_telefono_per}</Text>
+            <Text> </Text>
           </Group>
 
           <Group spacing={10} mt={5}>
@@ -93,10 +95,14 @@ export const getStaticProps = async (context) => {
       reside: true,
     },
   });
-
+  // console.log(data)
+  // console.log(data.reside.cod_municipio)
+  // console.log(typeof data);
   return {
     props: { person: JSON.parse(JSON.stringify(data)) },
   };
+
+
 };
 
 export const getStaticPaths = async () => {
