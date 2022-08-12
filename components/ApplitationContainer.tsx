@@ -7,8 +7,6 @@ import {
 import useSWR from 'swr'
 import { FooterS } from './Footer';
 
-import { HeaderSimpleProps } from '../interfaces';
-import { GetStaticProps } from 'next';
 import { HeaderMenu } from './HeaderMenu';
 import {linksData } from '../data/links';
 export  const ApplitationContainer  = ({children}) =>{
