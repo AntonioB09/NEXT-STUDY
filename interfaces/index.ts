@@ -8,3 +8,7 @@ export type User = {
   id: number
   name: string
 }
+
+export interface HeaderSimpleProps {
+  links: { link: string; label: string }[];
+}
