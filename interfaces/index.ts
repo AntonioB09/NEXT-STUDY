@@ -4,10 +4,6 @@
 //
 // import { User } from 'path/to/interfaces';
 
-export type User = {
-  id: number
-  name: string
-}
 
 export interface HeaderProps {
   links: { link: string; label: string ; sublabel?: string; sublabel2?: string}[];
@@ -15,4 +11,21 @@ export interface HeaderProps {
 
 export interface CardProps {
   cards: { imagen: string; titel: string ; description: string; bottom_name: string}[];
+}
+
+export interface RowData {
+  name: string;
+  email: string;
+  company: string;
+}
+
+export interface TableSortProps {
+  data: RowData[];
+}
+
+export interface ThProps {
+  children: React.ReactNode;
+  reversed: boolean;
+  sorted: boolean;
+  onSort(): void;
 }

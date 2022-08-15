@@ -75,8 +75,8 @@ export function HeaderMenu({ links }: HeaderProps) {
   const [opened, { toggle }] = useDisclosure(false);
   const { classes, cx } = useStyles();
 
-      const items = links.map((link) => (
-    <Group spacing={5}>
+      const items = links.map((link,id) => (
+    <Group spacing={5} key={id}>
       <Menu trigger="hover" exitTransitionDuration={0} withArrow>
         <Menu.Target>
           <a>

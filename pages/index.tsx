@@ -1,29 +1,29 @@
 import Head from "next/head";
 import { Card, Image, Text, Divider, Button, Group, Grid } from "@mantine/core";
 import {cardData} from '../data/props';
+import { CardProps } from "../interfaces";
 
 
-
-
-export default function Home() {
-  const cards = cardData[0] 
-  const items = cards.cards.map((card) => (
-    <Grid.Col md={6} lg={3}>
+export default function Home( ) {
+  const cards:CardProps = cardData[0]
+  const items = cards.cards.map((card,id) => (
+    <Grid.Col md={6} lg={3} key={id} >
     <Card shadow="sm" p="lg" radius="md" withBorder>
-      <Card.Section>
+      <Card.Section >
         <Image
+          
           src={card.imagen}
           height={160}
           alt="Norway"
         />
       </Card.Section>
 
-      <Group position="apart" mt="md" mb="xs">
+      <Group position="apart" mt="md" mb="xs" >
         <Text weight={500} size="xl">{card.titel}</Text>
 
       </Group>
       <Divider size="sm" />
-      <Text size="lg" color="dark">
+      <Text size="lg" color="dark" >
        {card.description}
       </Text>
 
