@@ -1,6 +1,6 @@
 import { HeaderSimpleProps} from '../interfaces'
 
-export const linksData: HeaderSimpleProps[] = [
+export const utilslinksData: HeaderSimpleProps[] = [
   {
       "links": [
         {

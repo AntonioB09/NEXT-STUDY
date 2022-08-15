@@ -9,6 +9,10 @@ export type User = {
   name: string
 }
 
-export interface HeaderSimpleProps {
-  links: { link: string; label: string }[];
+export interface HeaderProps {
+  links: { link: string; label: string ; sublabel?: string; sublabel2?: string}[];
+}
+
+export interface CardProps {
+  cards: { imagen: string; titel: string ; description: string; bottom_name: string}[];
 }
