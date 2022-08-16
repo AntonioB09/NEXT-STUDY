@@ -1,0 +1,263 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model asignado {
+  id_psalud      Int
+  cod_centro     Int
+  fecha_asignado DateTime       @db.Date
+  id             Int            @default(autoincrement())
+  centro_salud   centro_salud   @relation(fields: [cod_centro], references: [cod_centro], onDelete: NoAction, map: "cod_centro_foreign")
+  personal_salud personal_salud @relation(fields: [id_psalud], references: [doc_identidad], onDelete: NoAction, map: "id_psalud_foreign")
+
+  @@id([id_psalud, cod_centro])
+}
+
+model centro_salud {
+  cod_centro     Int             @id(map: "cod_centro_pkey")
+  nomb_centro    String          @db.VarChar(255)
+  direccion      String          @db.VarChar(255)
+  centro_hosp    Boolean         @default(false)
+  centro_vac     Boolean         @default(false)
+  id_encargado   Int?
+  cod_municipio  Int
+  activo         Boolean?        @default(true)
+  municipio      municipio       @relation(fields: [cod_municipio], references: [cod_municipio], onDelete: NoAction, map: "cod_municipio_foreign")
+  personal_salud personal_salud? @relation(fields: [id_encargado], references: [doc_identidad], onDelete: NoAction, map: "id_encargado_foreign")
+  asignado       asignado[]
+  hospitalizado  hospitalizado[]
+  vacunada       vacunada[]
+}
+
+model consiste {
+  cod_medicamento Int
+  cod_trat        Int
+  cant_dias       Int
+  dosis           Int
+  frecuencia      String      @db.VarChar(255)
+  id              Int         @default(autoincrement())
+  medicamento     medicamento @relation(fields: [cod_medicamento], references: [cod_medicamento], onDelete: NoAction, map: "cod_medicamento_foreign")
+  tratamiento     tratamiento @relation(fields: [cod_trat], references: [cod_trat], onDelete: NoAction, map: "cod_trat_foreign")
+
+  @@id([cod_medicamento, cod_trat])
+}
+
+model contagio {
+  doc_identidad      Int
+  denom_oms          String         @db.VarChar(255)
+  fecha_contagio     DateTime       @db.Date
+  tiempo_reposo      Int
+  casa_hospitalizado Boolean
+  id                 Int            @default(autoincrement())
+  virus_variante     virus_variante @relation(fields: [denom_oms], references: [denom_oms], onDelete: NoAction, map: "denom_oms_foreign")
+  persona            persona        @relation(fields: [doc_identidad], references: [doc_identidad], onDelete: NoAction, map: "doc_identidad_foreign")
+
+  @@id([doc_identidad, denom_oms])
+}
+
+model eficaz {
+  id_vacuna      Int
+  denom_oms      String         @db.VarChar(255)
+  porc_eficacia  Float          @db.Real
+  id             Int            @default(autoincrement())
+  virus_variante virus_variante @relation(fields: [denom_oms], references: [denom_oms], onDelete: NoAction, map: "denom_oms_foreign")
+  vacuna         vacuna         @relation(fields: [id_vacuna], references: [id_vacuna], onDelete: NoAction, map: "id_vacuna_foreign")
+
+  @@id([id_vacuna, denom_oms])
+}
+
+model estado_provincia {
+  cod_estado Int         @id(map: "cod_estado_pkey")
+  nom_estado String      @db.VarChar(255)
+  cod_pais   Int?
+  activo     Boolean?    @default(true)
+  pais       pais?       @relation(fields: [cod_pais], references: [cod_pais], onDelete: NoAction, map: "cod_pais_foreign")
+  municipio  municipio[]
+}
+
+model hospitalizado {
+  doc_identidad       Int
+  cod_centro          Int
+  fecha_hospitalizado DateTime     @db.Date
+  id                  Int          @default(autoincrement())
+  centro_salud        centro_salud @relation(fields: [cod_centro], references: [cod_centro], onDelete: NoAction, map: "cod_centro_foreign")
+  persona             persona      @relation(fields: [doc_identidad], references: [doc_identidad], onDelete: NoAction, map: "doc_identidad_foreign")
+
+  @@id([doc_identidad, cod_centro, fecha_hospitalizado])
+}
+
+model medicamento {
+  cod_medicamento    Int        @id(map: "cod_medicamento_pkey")
+  nombre_medicamento String     @db.VarChar(255)
+  compuesto          String     @db.VarChar(255)
+  concentracion      Float      @db.Real
+  activo             Boolean?   @default(true)
+  consiste           consiste[]
+}
+
+model municipio {
+  cod_municipio    Int               @id(map: "cod_municipio_pkey")
+  nombre_municipio String            @db.VarChar(255)
+  cod_estado       Int?
+  activo           Boolean?          @default(true)
+  estado_provincia estado_provincia? @relation(fields: [cod_estado], references: [cod_estado], onDelete: NoAction, map: "cod_estado_prov_foreign")
+  centro_salud     centro_salud[]
+  reside           reside[]
+}
+
+model pais {
+  cod_pais         Int                @id
+  nombre_pais      String             @db.VarChar(255)
+  activo           Boolean?           @default(true)
+  estado_provincia estado_provincia[]
+  vacuna           vacuna[]
+  virus_variante   virus_variante[]
+}
+
+model persona {
+  doc_identidad  Int             @id(map: "doc_identidad_pkey")
+  nombre_per     String          @db.VarChar(255)
+  apellido_per   String          @db.VarChar(255)
+  fecha_nac      DateTime        @db.Date
+  sexo           String          @db.VarChar(255)
+  ocupacion_per  String?         @db.VarChar(255)
+  alto_riesgo    Boolean
+  n_telefono_per Int?
+  direccion      String?         @db.VarChar(255)
+  es_paciente    Boolean?
+  es_pers_salud  Boolean?
+  nacionalidad   String          @db.VarChar(255)
+  activo         Boolean?        @default(true)
+  contagio       contagio[]
+  hospitalizado  hospitalizado[]
+  personal_salud personal_salud?
+  requiere       requiere[]
+  reside         reside[]
+  vacunada       vacunada[]
+}
+
+model personal_salud {
+  doc_identidad       Int            @id(map: "doc_identidad_psalud_pkey")
+  es_medico           Boolean        @default(false)
+  es_enfermeria       Boolean        @default(false)
+  es_asistente_medico Boolean        @default(false)
+  correo              String         @unique(map: "users_email_unique") @db.VarChar(255)
+  activo              Boolean?       @default(true)
+  persona             persona        @relation(fields: [doc_identidad], references: [doc_identidad], onDelete: NoAction, map: "id_personalsalud_foreign")
+  asignado            asignado[]
+  centro_salud        centro_salud[]
+  vacunada            vacunada[]
+}
+
+model presenta {
+  id_vacuna      Int
+  cod_sintoma    Int
+  id             Int            @default(autoincrement())
+  sintoma_efecto sintoma_efecto @relation(fields: [cod_sintoma], references: [cod_sintoma], onDelete: NoAction, map: "cod_sintoma_foreign")
+  vacuna         vacuna         @relation(fields: [id_vacuna], references: [id_vacuna], onDelete: NoAction, map: "id_vacuna_foreign")
+
+  @@id([id_vacuna, cod_sintoma])
+}
+
+model requiere {
+  id_paciente        Int
+  cod_trat           Int
+  fecha              DateTime    @db.Date
+  estado_tratamiento String?     @db.VarChar(255)
+  casa_hospitalizado Boolean
+  aislamiento        Boolean
+  id                 Int         @default(autoincrement())
+  tratamiento        tratamiento @relation(fields: [cod_trat], references: [cod_trat], onDelete: NoAction, map: "cod_trat_foreign")
+  persona            persona     @relation(fields: [id_paciente], references: [doc_identidad], onDelete: NoAction, map: "id_paciente_foreign")
+
+  @@id([id_paciente, cod_trat, fecha])
+}
+
+model reside {
+  doc_identidad Int
+  cod_municipio Int
+  fecha_reside  DateTime  @db.Date
+  id            Int       @default(autoincrement())
+  municipio     municipio @relation(fields: [cod_municipio], references: [cod_municipio], onDelete: NoAction, map: "cod_municipio_foreign")
+  persona       persona   @relation(fields: [doc_identidad], references: [doc_identidad], onDelete: NoAction, map: "doc_identidad_foreign")
+
+  @@id([doc_identidad, cod_municipio])
+}
+
+model sintoma_efecto {
+  cod_sintoma     Int        @id(map: "cod_sintoma_pkey")
+  descrip_sintoma String     @db.VarChar(255)
+  activo          Boolean?   @default(true)
+  presenta        presenta[]
+  tiene           tiene[]
+}
+
+model tiene {
+  denom_oms      String         @db.VarChar(255)
+  cod_sintoma    Int
+  id             Int            @default(autoincrement())
+  sintoma_efecto sintoma_efecto @relation(fields: [cod_sintoma], references: [cod_sintoma], onDelete: NoAction, map: "cod_sintoma_foreign")
+  virus_variante virus_variante @relation(fields: [denom_oms], references: [denom_oms], onDelete: NoAction, map: "denom_oms_foreign")
+
+  @@id([cod_sintoma, denom_oms])
+}
+
+model tratamiento {
+  cod_trat            Int        @id(map: "cod_trat_pkey")
+  nomb_tratamiento    String     @db.VarChar(255)
+  descrip_tratamiento String     @db.VarChar(255)
+  activo              Boolean?   @default(true)
+  consiste            consiste[]
+  requiere            requiere[]
+}
+
+model vacuna {
+  id_vacuna   Int        @id(map: "id_vacuna_pkey")
+  nomb_vacuna String     @db.VarChar(255)
+  lote        Int
+  cant_dosis  Int
+  tipo        String     @db.VarChar(255)
+  laboratorio String     @db.VarChar(255)
+  cod_pais    Int
+  activo      Boolean?   @default(true)
+  pais        pais       @relation(fields: [cod_pais], references: [cod_pais], onDelete: NoAction, map: "cod_pais_foreign")
+  eficaz      eficaz[]
+  presenta    presenta[]
+  vacunada    vacunada[]
+}
+
+model vacunada {
+  doc_identidad  Int
+  id_vacuna      Int
+  cod_centro     Int
+  id_psalud      Int
+  fecha_vacuna   DateTime       @db.Date
+  dosis          Int
+  id             Int            @default(autoincrement())
+  centro_salud   centro_salud   @relation(fields: [cod_centro], references: [cod_centro], onDelete: NoAction, map: "cod_centro_foreign")
+  persona        persona        @relation(fields: [doc_identidad], references: [doc_identidad], onDelete: NoAction, map: "doc_identidad_foreign")
+  personal_salud personal_salud @relation(fields: [id_psalud], references: [doc_identidad], onDelete: NoAction, map: "id_psalud_foreign")
+  vacuna         vacuna         @relation(fields: [id_vacuna], references: [id_vacuna], onDelete: NoAction, map: "id_vacuna_foreign")
+
+  @@id([doc_identidad, id_vacuna, cod_centro, id_psalud, fecha_vacuna])
+}
+
+model virus_variante {
+  virus         String     @db.VarChar(255)
+  denom_oms     String     @id(map: "denom_oms_pkey") @db.VarChar(255)
+  linaje        String     @db.VarChar(255)
+  origen_annio  DateTime   @db.Date
+  origen_mes    DateTime   @db.Date
+  cod_pais      Int
+  clasificacion String     @db.VarChar(255)
+  activo        Int        @default(autoincrement())
+  pais          pais       @relation(fields: [cod_pais], references: [cod_pais], onDelete: NoAction, map: "cod_pais_foreign")
+  contagio      contagio[]
+  eficaz        eficaz[]
+  tiene         tiene[]
+}
