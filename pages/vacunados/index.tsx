@@ -209,19 +209,19 @@ export default function Vacunados( {personas}: TableSortProps) {
 
 export const getServerSideProps:GetServerSideProps = async (ctx) => {
 
-  const pern =await prisma.persona.findMany({
+  const pern  =await prisma.persona.findMany({
     select:{
+      doc_identidad:true,
       nombre_per:true,
       apellido_per:true,
-      doc_identidad:true,
-      fecha_nac:true,
       sexo:true,
+      fecha_nac:true,
       ocupacion_per:true,
 
   }})
-  // console.log(typeof pern[0].doc_identidad.toString())
+  // console.table( pern)
 
-  // console.log(typeof pern[0].doc_identidad)
+  // console.log(typeof pern)
   
   
   return {

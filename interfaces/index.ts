@@ -14,10 +14,10 @@ export interface CardProps {
 }
 
 export interface RowData {
-  doc_identidad:  string;          
+  doc_identidad:  number;          
   nombre_per:     string;         
   apellido_per:   string;        
-  fecha_nac:      string;
+  fecha_nac?:     number;
   sexo:           string;          
   ocupacion_per:  string;        
 }
