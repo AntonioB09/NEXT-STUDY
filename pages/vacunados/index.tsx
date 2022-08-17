@@ -1,5 +1,5 @@
-import { GetServerSideProps } from 'next';
-import { useState } from 'react';
+import { GetServerSideProps } from "next";
+import { useState } from "react";
 import {
   createStyles,
   Table,
@@ -9,23 +9,34 @@ import {
   Text,
   Center,
   TextInput,
-} from '@mantine/core';
-import { keys } from '@mantine/utils';
-import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
-import { RowData, TableSortProps, ThProps } from '../../interfaces';
+  Anchor,
+  Badge,
+} from "@mantine/core";
+import { keys } from "@mantine/utils";
+import {
+  IconSelector,
+  IconChevronDown,
+  IconChevronUp,
+  IconSearch,
+} from "@tabler/icons";
+import { RowData, TableSortProps, ThProps } from "../../interfaces";
 
-import prisma from '../../lib/prisma';
+import prisma from "../../lib/prisma";
+import Link from "next/link";
 const useStyles = createStyles((theme) => ({
   th: {
-    padding: '0 !important',
+    padding: "0 !important",
   },
 
   control: {
-    width: '100%',
+    width: "100%",
     padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
 
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[1],
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[1],
     },
   },
 
@@ -36,11 +47,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-
-
 function Th({ children, reversed, sorted, onSort }: ThProps) {
   const { classes } = useStyles();
-  const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
+  const Icon = sorted
+    ? reversed
+      ? IconChevronUp
+      : IconChevronDown
+    : IconSelector;
   return (
     <th className={classes.th}>
       <UnstyledButton onClick={onSort} className={classes.control}>
@@ -58,7 +71,12 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 }
 
 function filterData(data: RowData[], search: string) {
-  
+  // data.map(x => {
+  //   ['doc_identidad'].forEach(key => {
+  //     x[key] = x[key].toString();
+  //   });
+  //   return x;
+  // });
   const query = search.toLowerCase().trim();
   return data.filter((item) =>
     keys(data[0]).some((key) => item[key].toLowerCase().includes(query))
@@ -68,41 +86,36 @@ function filterData(data: RowData[], search: string) {
 function sortData(
   data: RowData[],
   payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
-  
 ) {
   const { sortBy } = payload;
-  
-  
+
   if (!sortBy) {
     return filterData(data, payload.search);
   }
-  
+
   return filterData(
     [...data].sort((a, b) => {
       if (payload.reversed) {
         return b[sortBy].localeCompare(a[sortBy]);
       }
-      
-      
+
       return a[sortBy].localeCompare(b[sortBy]);
     }),
     payload.search
   );
 }
 
-
-
-export default function Vacunados( {personas}: TableSortProps) {
-  personas.map(x => {
-    ['doc_identidad'].forEach(key => {
+export default function Vacunados({ personas }: TableSortProps) {
+  personas.map((x) => {
+    ["doc_identidad", "alto_riesgo"].forEach((key) => {
       x[key] = x[key].toString();
     });
     return x;
   });
-  
+
   // console.table(personas);
-  const [search, setSearch] = useState('');
-  const [sortedData, setSortedData] = useState( personas);
+  const [search, setSearch] = useState("");
+  const [sortedData, setSortedData] = useState(personas);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
@@ -110,23 +123,45 @@ export default function Vacunados( {personas}: TableSortProps) {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData( personas, { sortBy: field, reversed, search }));
+    setSortedData(sortData(personas, { sortBy: field, reversed, search }));
   };
-  
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
-    setSortedData(sortData( personas, { sortBy, reversed: reverseSortDirection, search: value }));
+    setSortedData(
+      sortData(personas, {
+        sortBy,
+        reversed: reverseSortDirection,
+        search: value,
+      })
+    );
   };
 
-// console.log('xs7777',sortedData)
+  // console.log('xs7777',sortedData)
+  const rColors = {
+    true: "red",
+    false: "blue",
+  };
   const rows = sortedData.map((row) => (
-    <tr key={row.nombre_per}>
-      <td>{row.nombre_per} {row.apellido_per}</td>
+    <tr key={row.doc_identidad}>
+      <td>
+        <Link href={`/vacunados/${row.doc_identidad}`} passHref>
+          <Anchor component="a">
+            {row.nombre_per} {row.apellido_per}
+          </Anchor>
+        </Link>
+      </td>
       <td>{row.doc_identidad}</td>
       <td>{row.fecha_nac}</td>
-      <td>{row.sexo}</td>
+      <td >{row.sexo}</td>
       <td>{row.ocupacion_per}</td>
+      <td>
+        {" "}
+        <Badge color={rColors[row.alto_riesgo.toString()]}>
+          {row.alto_riesgo}
+        </Badge>
+      </td>
     </tr>
   ));
 
@@ -140,47 +175,56 @@ export default function Vacunados( {personas}: TableSortProps) {
         onChange={handleSearchChange}
       />
       <Table
+        highlightOnHover
         horizontalSpacing="md"
         verticalSpacing="xs"
-        sx={{ tableLayout: 'fixed', minWidth: 700 }}
+        sx={{ tableLayout: "fixed", minWidth: 700, alignItems:"center" }}
       >
         <thead>
           <tr>
-            < Th
-              sorted={sortBy === 'nombre_per'}
+            <Th
+              sorted={sortBy === "nombre_per"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('nombre_per')}
+              onSort={() => setSorting("nombre_per")}
             >
-              Nombre 
-            </ Th>
-            < Th
-              sorted={sortBy === 'doc_identidad'}
+              Nombre
+            </Th>
+
+            <Th
+              sorted={sortBy === "doc_identidad"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('doc_identidad')}
+              onSort={() => setSorting("doc_identidad")}
             >
               Cedula
-            </ Th>
-            < Th
-              sorted={sortBy === 'fecha_nac'}
+            </Th>
+            <Th
+              sorted={sortBy === "fecha_nac"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('fecha_nac')}
+              onSort={() => setSorting("fecha_nac")}
             >
               Fecha de nacimiento
-            </ Th>
-            < Th
-              sorted={sortBy === 'sexo'}
+            </Th>
+            <Th
+              sorted={sortBy === "sexo"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('sexo')}
+              onSort={() => setSorting("sexo")}
             >
               Genero
-            </ Th>
-            < Th
-              sorted={sortBy === 'sexo'}
+            </Th>
+            <Th
+              sorted={sortBy === "sexo"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('sexo')}
+              onSort={() => setSorting("sexo")}
             >
               Ocupacion
-            </ Th>
+            </Th>
+            <Th
+              sorted={sortBy === "alto_riesgo"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("alto_riesgo")}
+            >
+              Alto Riesgo
+            </Th>
           </tr>
         </thead>
         <tbody>
@@ -201,35 +245,25 @@ export default function Vacunados( {personas}: TableSortProps) {
   );
 }
 
-
-
-
-
-
-
-export const getServerSideProps:GetServerSideProps = async (ctx) => {
-
-  const pern  =await prisma.persona.findMany({
-    select:{
-      doc_identidad:true,
-      nombre_per:true,
-      apellido_per:true,
-      sexo:true,
-      fecha_nac:true,
-      ocupacion_per:true,
-
-  }})
-  // console.table( pern)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const pern = await prisma.persona.findMany({
+    select: {
+      doc_identidad: true,
+      nombre_per: true,
+      apellido_per: true,
+      sexo: true,
+      fecha_nac: true,
+      ocupacion_per: true,
+      alto_riesgo: true,
+    },
+  });
+  console.table(pern);
 
   // console.log(typeof pern)
-  
-  
-  return {
-    props:{
-      personas: JSON.parse(JSON.stringify(pern )) 
-     
-    }
-    
-  }
-}
 
+  return {
+    props: {
+      personas: JSON.parse(JSON.stringify(pern)),
+    },
+  };
+};
