@@ -93,7 +93,14 @@ function sortData(
 
 
 export default function Vacunados( {personas}: TableSortProps) {
- 
+  personas.map(x => {
+    ['doc_identidad'].forEach(key => {
+      x[key] = x[key].toString();
+    });
+    return x;
+  });
+  
+  // console.table(personas);
   const [search, setSearch] = useState('');
   const [sortedData, setSortedData] = useState( personas);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
@@ -146,13 +153,13 @@ export default function Vacunados( {personas}: TableSortProps) {
             >
               Nombre 
             </ Th>
-            < th
-              // sorted={sortBy === 'doc_identidad'}
-              // reversed={reverseSortDirection}
-              // onSort={() => setSorting('doc_identidad')}
+            < Th
+              sorted={sortBy === 'doc_identidad'}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting('doc_identidad')}
             >
               Cedula
-            </ th>
+            </ Th>
             < Th
               sorted={sortBy === 'fecha_nac'}
               reversed={reverseSortDirection}
