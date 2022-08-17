@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import {
   createStyles,
@@ -12,7 +13,8 @@ import {
 import { keys } from '@mantine/utils';
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
 import { RowData, TableSortProps, ThProps } from '../../interfaces';
-import { personas } from '../../data/props';
+
+import prisma from '../../lib/prisma';
 const useStyles = createStyles((theme) => ({
   th: {
     padding: '0 !important',
@@ -56,6 +58,7 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
 }
 
 function filterData(data: RowData[], search: string) {
+  
   const query = search.toLowerCase().trim();
   return data.filter((item) =>
     keys(data[0]).some((key) => item[key].toLowerCase().includes(query))
@@ -65,30 +68,34 @@ function filterData(data: RowData[], search: string) {
 function sortData(
   data: RowData[],
   payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
+  
 ) {
   const { sortBy } = payload;
-
+  
+  
   if (!sortBy) {
     return filterData(data, payload.search);
   }
-
+  
   return filterData(
     [...data].sort((a, b) => {
       if (payload.reversed) {
         return b[sortBy].localeCompare(a[sortBy]);
       }
-
+      
+      
       return a[sortBy].localeCompare(b[sortBy]);
     }),
     payload.search
   );
 }
 
-export default function Vacunados() {
-  // const {name,email,company} =props.data[0]
-  const personast = personas[0].data
+
+
+export default function Vacunados( {personas}: TableSortProps) {
+ 
   const [search, setSearch] = useState('');
-  const [sortedData, setSortedData] = useState( personast);
+  const [sortedData, setSortedData] = useState( personas);
   const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
@@ -96,20 +103,23 @@ export default function Vacunados() {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData( personast, { sortBy: field, reversed, search }));
+    setSortedData(sortData( personas, { sortBy: field, reversed, search }));
   };
-
+  
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
-    setSortedData(sortData( personast, { sortBy, reversed: reverseSortDirection, search: value }));
+    setSortedData(sortData( personas, { sortBy, reversed: reverseSortDirection, search: value }));
   };
 
+// console.log('xs7777',sortedData)
   const rows = sortedData.map((row) => (
-    <tr key={row.name}>
-      <td>{row.name}</td>
-      <td>{row.email}</td>
-      <td>{row.company}</td>
+    <tr key={row.nombre_per}>
+      <td>{row.nombre_per} {row.apellido_per}</td>
+      <td>{row.doc_identidad}</td>
+      <td>{row.fecha_nac}</td>
+      <td>{row.sexo}</td>
+      <td>{row.ocupacion_per}</td>
     </tr>
   ));
 
@@ -130,25 +140,39 @@ export default function Vacunados() {
         <thead>
           <tr>
             < Th
-              sorted={sortBy === 'name'}
+              sorted={sortBy === 'nombre_per'}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('name')}
+              onSort={() => setSorting('nombre_per')}
             >
-              Name
+              Nombre 
+            </ Th>
+            < th
+              // sorted={sortBy === 'doc_identidad'}
+              // reversed={reverseSortDirection}
+              // onSort={() => setSorting('doc_identidad')}
+            >
+              Cedula
+            </ th>
+            < Th
+              sorted={sortBy === 'fecha_nac'}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting('fecha_nac')}
+            >
+              Fecha de nacimiento
             </ Th>
             < Th
-              sorted={sortBy === 'email'}
+              sorted={sortBy === 'sexo'}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('email')}
+              onSort={() => setSorting('sexo')}
             >
-              Email
+              Genero
             </ Th>
             < Th
-              sorted={sortBy === 'company'}
+              sorted={sortBy === 'sexo'}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('company')}
+              onSort={() => setSorting('sexo')}
             >
-              Company
+              Ocupacion
             </ Th>
           </tr>
         </thead>
@@ -157,7 +181,7 @@ export default function Vacunados() {
             rows
           ) : (
             <tr>
-              <td colSpan={Object.keys(personast[0]).length}>
+              <td colSpan={Object.keys(personas[0]).length}>
                 <Text weight={500} align="center">
                   Nothing found
                 </Text>
@@ -169,3 +193,36 @@ export default function Vacunados() {
     </ScrollArea>
   );
 }
+
+
+
+
+
+
+
+export const getServerSideProps:GetServerSideProps = async (ctx) => {
+
+  const pern =await prisma.persona.findMany({
+    select:{
+      nombre_per:true,
+      apellido_per:true,
+      doc_identidad:true,
+      fecha_nac:true,
+      sexo:true,
+      ocupacion_per:true,
+
+  }})
+  // console.log(typeof pern[0].doc_identidad.toString())
+
+  // console.log(typeof pern[0].doc_identidad)
+  
+  
+  return {
+    props:{
+      personas: JSON.parse(JSON.stringify(pern )) 
+     
+    }
+    
+  }
+}
+

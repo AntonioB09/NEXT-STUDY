@@ -14,18 +14,21 @@ export interface CardProps {
 }
 
 export interface RowData {
-  name: string;
-  email: string;
-  company: string;
+  doc_identidad:  string;          
+  nombre_per:     string;         
+  apellido_per:   string;        
+  fecha_nac:      string;
+  sexo:           string;          
+  ocupacion_per:  string;        
 }
 
 export interface TableSortProps {
-  data: RowData[];
+  personas: RowData[];
 }
 
 export interface ThProps {
-  children: React.ReactNode;
-  reversed: boolean;
-  sorted: boolean;
-  onSort(): void;
+  children?: React.ReactNode;
+  reversed?: boolean;
+  sorted?: boolean;
+  onSort?(): void;
 }
