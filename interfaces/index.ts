@@ -16,7 +16,6 @@ export interface CardProps {
 }
 
 
-
 export interface Persona {
   doc_identidad:  number;          
   nombre_per:     string;         
@@ -24,17 +23,18 @@ export interface Persona {
   fecha_nac:      Date;
   sexo:           string;          
   ocupacion_per:  string;
-  alto_riesgo:    boolean;          
-}
-
-export interface DetallePersona extends Persona {
+  alto_riesgo:    boolean;
   n_telefono_per: number;
   direccion:      string;
   es_paciente:    boolean;
   es_pers_salud:  boolean;
   nacionalidad:   string;
   activo:         boolean;
-  reside:         Reside[];
+  reside:         Reside[];          
+}
+
+export interface DetallePersona {
+  detalles_persona: Persona;
 }
 
 

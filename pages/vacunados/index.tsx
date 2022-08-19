@@ -24,6 +24,7 @@ import {  Persona, TableSortProps, ThProps } from "../../interfaces";
 import prisma from "../../lib/prisma";
 import Link from "next/link";
 
+
 const useStyles = createStyles((theme) => ({
   th: {
     padding: "0 !important",
@@ -272,8 +273,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      personas: JSON.parse(JSON.stringify(pern)) as Persona[]
-      
+      personas: JSON.parse(JSON.stringify(pern))      
     },
   };
 };

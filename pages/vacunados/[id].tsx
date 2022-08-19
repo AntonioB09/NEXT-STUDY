@@ -1,19 +1,45 @@
+
 import { GetStaticProps, GetStaticPaths } from "next";
+import { DetallePersona } from "../../interfaces";
 
 import prisma from "../../lib/prisma";
 
-const StaticPropsDetail = ({ dpersondetail }) => {
-  console.table(dpersondetail);
+const StaticPropsDetail = ({detalles_persona } :DetallePersona ) => {
+  console.table(detalles_persona);
+ if (detalles_persona.reside[0]){
 
-  return (
-    <div>
-      <h1>{dpersondetail.doc_identidad}</h1>
-      <p>{dpersondetail.nombre_per}</p>
-      <p>{dpersondetail.fecha_nac}</p>
-      <p>{dpersondetail.sexo}</p>
-      <p>{dpersondetail.ocupacion_per}</p>
+   return (
+     <div>
+      <h1>{detalles_persona.nombre_per}</h1>
+      <p>{detalles_persona.apellido_per}</p>
+      <p>{detalles_persona.fecha_nac.toString().split("T00:00:00.000Z")}</p>
+      <p>{detalles_persona.sexo}</p>
+      <p>{detalles_persona.ocupacion_per}</p>
+      <p>{detalles_persona.alto_riesgo.toString()}</p>
+      <p>{detalles_persona.n_telefono_per}</p>
+      <p>{detalles_persona.nacionalidad}</p>
+      <p>{detalles_persona.direccion}</p>
+      <p>{detalles_persona.reside[0].fecha_reside.toString().split("T00:00:00.000Z")}</p>
+      <p>{detalles_persona.es_paciente.toString()}</p>
+
+      
     </div>
   );
+}else return (
+  <div>
+   <h1>{detalles_persona.nombre_per}</h1>
+   <p>{detalles_persona.apellido_per}</p>
+   <p>{detalles_persona.fecha_nac.toString().split("T00:00:00.000Z")}</p>
+   <p>{detalles_persona.sexo}</p>
+   <p>{detalles_persona.ocupacion_per}</p>
+   <p>{detalles_persona.alto_riesgo}</p>
+   <p>{detalles_persona.n_telefono_per}</p>
+   <p>{detalles_persona.nacionalidad}</p>
+   <p>{detalles_persona.direccion}</p>
+   
+
+   </div>
+ )
 };
 
 export default StaticPropsDetail;
@@ -40,13 +66,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (typeof id === "string")
    var int = parseInt(id);
   console.log(int);
-  const data = await prisma.persona.findUnique({
+  const DocPersona = await prisma.persona.findUnique({
     where: {
       doc_identidad: int,
     },
+    include:{
+      reside:true,
+    }
   });
-
+  // console.log(DocPersona );
   return {
-    props: { dpersondetail: JSON.parse(JSON.stringify(data)) },
+    props: { detalles_persona: JSON.parse(JSON.stringify(DocPersona))  },
   };
 };
