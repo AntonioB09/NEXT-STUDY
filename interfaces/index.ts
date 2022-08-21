@@ -15,8 +15,13 @@ export interface CardProps {
   cards: { imagen: string; titel: string ; description: string; bottom_name: string}[];
 }
 
+export enum altoRiesgo{
+  true = "red",
+  false = "green" 
+}
 
 export interface Persona {
+ 
   doc_identidad:  number;          
   nombre_per:     string;         
   apellido_per:   string;        
@@ -33,7 +38,7 @@ export interface Persona {
   reside:         Reside[];          
 }
 
-export interface DetallePersona {
+export interface IDetallePersona {
   detalles_persona: Persona;
 }
 

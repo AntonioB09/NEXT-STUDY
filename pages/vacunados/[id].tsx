@@ -1,16 +1,17 @@
 
 import { GetStaticProps, GetStaticPaths } from "next";
-import { DetallePersona } from "../../interfaces";
+import { DetallePersona } from "../../components/DetallesPersona";
+import { IDetallePersona } from "../../interfaces";
 
 import prisma from "../../lib/prisma";
 
-const StaticPropsDetail = ({detalles_persona } :DetallePersona ) => {
-  console.table(detalles_persona);
+const StaticPropsDetail = ({detalles_persona } :IDetallePersona ) => {
+  // console.table(detalles_persona);
  if (detalles_persona.reside[0]){
 
    return (
      <div>
-      <h1>{detalles_persona.nombre_per}</h1>
+      {/* <h1>{detalles_persona.nombre_per}</h1>
       <p>{detalles_persona.apellido_per}</p>
       <p>{detalles_persona.fecha_nac.toString().split("T00:00:00.000Z")}</p>
       <p>{detalles_persona.sexo}</p>
@@ -20,8 +21,8 @@ const StaticPropsDetail = ({detalles_persona } :DetallePersona ) => {
       <p>{detalles_persona.nacionalidad}</p>
       <p>{detalles_persona.direccion}</p>
       <p>{detalles_persona.reside[0].fecha_reside.toString().split("T00:00:00.000Z")}</p>
-      <p>{detalles_persona.es_paciente.toString()}</p>
-
+      <p>{detalles_persona.es_paciente.toString()}</p> */}
+       <DetallePersona  detalles_persona={ detalles_persona}/>
       
     </div>
   );

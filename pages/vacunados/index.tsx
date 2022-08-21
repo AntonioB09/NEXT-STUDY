@@ -19,7 +19,7 @@ import {
   IconChevronUp,
   IconSearch,
 } from "@tabler/icons";
-import {  Persona, TableSortProps, ThProps } from "../../interfaces";
+import {  altoRiesgo, Persona, TableSortProps, ThProps } from "../../interfaces";
 
 import prisma from "../../lib/prisma";
 import Link from "next/link";
@@ -144,10 +144,7 @@ export default function Vacunados({ personas }: TableSortProps) {
   };
 
   // console.log('xs7777',sortedData)
-  enum altoRiesgo{
-    true = "red",
-    false = "green" 
-  }
+
   
   // const dia = personas[0].fecha_nac.getDate()
   //  console.log(personas[0].fecha_nac)
